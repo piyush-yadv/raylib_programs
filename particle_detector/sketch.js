@@ -36,10 +36,22 @@ function drawScanner() {
     r.DrawRectangle(scannerX, scannerY, scannerWidth, scannerHeight, scannerColor);
 }
 
+function drawBlueParticleField() {
+
+    const blueRangeX = WINDOW_WIDTH / 3;
+    const blueRangeY = 0;
+    const blueRangeWidth = WINDOW_WIDTH / 6;
+    const blueRangeHeight = WINDOW_HEIGHT;
+    const blueRangeColor = r.BLUE;
+
+    r.DrawRectangle(blueRangeX, blueRangeY, blueRangeWidth, blueRangeHeight, blueRangeColor);
+}
+
 function draw() {
     r.BeginDrawing();
     r.ClearBackground(r.BLACK);
 
+    drawBlueParticleField();
     drawScanner();
 
     r.EndDrawing();
