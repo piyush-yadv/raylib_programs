@@ -5,8 +5,8 @@ function running() {
     return !r.WindowShouldClose();
 }
 
-const WINDOW_WIDTH = 700;
-const WINDOW_HEIGHT = 500;
+const WINDOW_WIDTH = 300;
+const WINDOW_HEIGHT = 200;
 const TITLE = "Particle Detector";
 const FPS = 50;
 
@@ -36,12 +36,11 @@ function drawScanner() {
     r.DrawRectangle(scannerX, scannerY, scannerWidth, scannerHeight, scannerColor);
 }
 
-
 function draw() {
     r.BeginDrawing();
     r.ClearBackground(r.BLACK);
 
-    drawScanner()
+    drawScanner();
 
     r.EndDrawing();
 }
