@@ -7,8 +7,17 @@ function scannerUpdate(x, min, max) {
 
 }
 
+function isOverlap(scannerX, scannerWidth, targetX, targetWidth) {
+
+    if (scannerX >= (targetX - scannerWidth) && scannerX <= (targetX + targetWidth)) {
+        return true;
+    }
+    return false;
+}
+
 module.exports = {
 
     scannerUpdate,
+    isOverlap,
 
 };
