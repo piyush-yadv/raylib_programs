@@ -5,8 +5,8 @@ function running() {
     return !r.WindowShouldClose();
 }
 
-const WINDOW_WIDTH = 300;
-const WINDOW_HEIGHT = 200;
+const WINDOW_WIDTH = 600;
+const WINDOW_HEIGHT = 400;
 const TITLE = "Particle Detector";
 const FPS = 50;
 
@@ -32,7 +32,7 @@ const smallRangeWidth = WINDOW_WIDTH / 60;
 const horizonRangeY = WINDOW_HEIGHT / 4 + 10;
 const HorizonRangeHeight = WINDOW_HEIGHT / 10;
 
-function update() {
+function updateScanners() {
 
     const firstScannerSpeed = 1;
     const firstScannerMinRange = 0;
@@ -81,11 +81,15 @@ function drawParticleFields() {
     const RANGE_HEIGHT = WINDOW_HEIGHT;
 
     const HORIZON_RANGE_X = 0;
-    const HORIZON_RANGE_WIDTH = 300;
+    const HORIZON_RANGE_WIDTH = WINDOW_WIDTH;
 
     r.DrawRectangle(bigRangeX, RANGE_Y, bigRangeWidth, RANGE_HEIGHT, RANGE_COLOR);
     r.DrawRectangle(smallRangeX, RANGE_Y, smallRangeWidth, RANGE_HEIGHT, RANGE_COLOR);
     r.DrawRectangle(HORIZON_RANGE_X, horizonRangeY, HORIZON_RANGE_WIDTH, HorizonRangeHeight, RANGE_COLOR);
+}
+
+function update() {
+    updateScanners();
 }
 
 function draw() {
