@@ -1,10 +1,20 @@
-function scannerUpdate(x, min, max) {
+let firstFlag;
+let secondFlag;
 
-    if (x === min) flag = true;
-    if (x === max) flag = false;
+function firstScannerUpdate(x, min, max, speed) {
 
-    return flag ? x + 1 : x - 1;
+    if (x <= min) firstFlag = true;
+    if (x === max) firstFlag = false;
 
+    return firstFlag ? x + speed : x - speed;
+}
+
+function secondScannerUpdate(x, min, max, speed) {
+
+    if (x <= min) secondFlag = true;
+    if (x === max) secondFlag = false;
+
+    return secondFlag ? x + speed : x - speed;
 }
 
 function isOverlap(scannerX, scannerWidth, targetX, targetWidth) {
@@ -15,9 +25,11 @@ function isOverlap(scannerX, scannerWidth, targetX, targetWidth) {
     return false;
 }
 
+
 module.exports = {
 
-    scannerUpdate,
+    firstScannerUpdate,
+    secondScannerUpdate,
     isOverlap,
 
 };

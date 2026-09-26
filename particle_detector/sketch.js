@@ -15,8 +15,10 @@ function setup() {
     r.SetTargetFPS(FPS);
 }
 
-let scannerX = 0;
-const scannerWidth = WINDOW_WIDTH / 15;
+const SCANNER_WIDTH = WINDOW_WIDTH / 15;
+
+let firstScannerX = 0;
+let secondScannerX = (WINDOW_WIDTH / 2);
 
 const bigBlueRangeX = WINDOW_WIDTH / 3;
 const bigBlueRangeWidth = WINDOW_WIDTH / 6;
@@ -26,11 +28,16 @@ const smallBlueRangeWidth = WINDOW_WIDTH / 60;
 
 function update() {
 
-    const MAX_RANGE = WINDOW_WIDTH - scannerWidth;
-    const MIN_RANGE = 0;
+    const firstScannerSpeed = 1;
+    const firstScannerMinRange = 0;
+    const firstScannerMaxRange = (WINDOW_WIDTH / 2) - SCANNER_WIDTH;
 
-    scannerX = geometry.scannerUpdate(scannerX, MIN_RANGE, MAX_RANGE);
+    const secondScannerSpeed = 2;
+    const secondScannerMinRange = (WINDOW_WIDTH / 2);
+    const secondScannerMaxRange = WINDOW_WIDTH - SCANNER_WIDTH;
 
+    firstScannerX = geometry.firstScannerUpdate(firstScannerX, firstScannerMinRange, firstScannerMaxRange, firstScannerSpeed);
+    secondScannerX = geometry.secondScannerUpdate(secondScannerX, secondScannerMinRange, secondScannerMaxRange, secondScannerSpeed);
 }
 
 function drawScanner() {
@@ -38,16 +45,15 @@ function drawScanner() {
     const SCANNER_Y = 0;
     const SCANNER_HEIGHT = WINDOW_HEIGHT;
 
-    const overlapFirst = geometry.isOverlap(scannerX, scannerWidth, bigBlueRangeX, bigBlueRangeWidth)
-    const overlapSecond = geometry.isOverlap(scannerX, scannerWidth, smallBlueRangeX, smallBlueRangeWidth)
+    const overlapFirst = geometry.isOverlap(firstScannerX, SCANNER_WIDTH, bigBlueRangeX, bigBlueRangeWidth)
+    const overlapSecond = geometry.isOverlap(secondScannerX, SCANNER_WIDTH, smallBlueRangeX, smallBlueRangeWidth)
 
 
-    let scannerColor = r.WHITE;
-    if (overlapFirst || overlapSecond) {
-        scannerColor = r.RED;
-    }
+    let firstScannerColor = overlapFirst ? r.RED : r.WHITE;
+    let secondScannerColor = overlapSecond ? r.RED : r.WHITE;
 
-    r.DrawRectangle(scannerX, SCANNER_Y, scannerWidth, SCANNER_HEIGHT, scannerColor);
+    r.DrawRectangle(firstScannerX, SCANNER_Y, SCANNER_WIDTH, SCANNER_HEIGHT, firstScannerColor);
+    r.DrawRectangle(secondScannerX, SCANNER_Y, SCANNER_WIDTH, SCANNER_HEIGHT, secondScannerColor);
 }
 
 function drawBlueParticleField() {
