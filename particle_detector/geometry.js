@@ -2,7 +2,6 @@ let firstFlag;
 let secondFlag;
 
 function firstScannerUpdate(x, min, max, speed) {
-
     if (x <= min) firstFlag = true;
     if (x === max) firstFlag = false;
 
@@ -31,5 +30,4 @@ module.exports = {
     firstScannerUpdate,
     secondScannerUpdate,
     isOverlap,
-
 };
