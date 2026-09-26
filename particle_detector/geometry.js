@@ -1,5 +1,6 @@
 let firstFlag;
 let secondFlag;
+let verticalFlag;
 
 function firstScannerUpdate(x, min, max, speed) {
     if (x <= min) firstFlag = true;
@@ -16,6 +17,14 @@ function secondScannerUpdate(x, min, max, speed) {
     return secondFlag ? x + speed : x - speed;
 }
 
+function verticalScannerUpdate(y, min, max, speed) {
+
+    if (y <= min) verticalFlag = true;
+    if (y >= max) verticalFlag = false;
+
+    return verticalFlag ? y + speed : y - speed;
+}
+
 function isOverlap(scannerX, scannerWidth, targetX, targetWidth) {
 
     if (scannerX >= (targetX - scannerWidth) && scannerX <= (targetX + targetWidth)) {
@@ -29,5 +38,6 @@ module.exports = {
 
     firstScannerUpdate,
     secondScannerUpdate,
+    verticalScannerUpdate,
     isOverlap,
 };
