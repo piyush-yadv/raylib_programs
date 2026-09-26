@@ -5,8 +5,8 @@ function running() {
     return !r.WindowShouldClose();
 }
 
-const WINDOW_WIDTH = 600;
-const WINDOW_HEIGHT = 400;
+const WINDOW_WIDTH = 300;
+const WINDOW_HEIGHT = 200;
 const TITLE = "Particle Detector";
 const FPS = 50;
 
@@ -23,22 +23,22 @@ let secondScannerX = (WINDOW_WIDTH / 2);
 let verticalScannerY = 0;
 const verticalScannerHeight = WINDOW_HEIGHT / 10;
 
-const bigRangeX = WINDOW_WIDTH / 3;
-const bigRangeWidth = WINDOW_WIDTH / 6;
+const firstRangeX = WINDOW_WIDTH / 3;
+const firstRangeWidth = WINDOW_WIDTH / 6;
 
-const smallRangeX = (WINDOW_WIDTH / 3) * 2;
-const smallRangeWidth = WINDOW_WIDTH / 60;
+const secondRangeX = WINDOW_WIDTH * 2 / 3;
+const secondRangeWidth = WINDOW_WIDTH / 60;
 
 const horizonRangeY = WINDOW_HEIGHT / 4 + 10;
 const HorizonRangeHeight = WINDOW_HEIGHT / 10;
 
 function updateScanners() {
 
-    const firstScannerSpeed = 1;
+    const firstScannerSpeed = 2;
     const firstScannerMinRange = 0;
     const firstScannerMaxRange = (WINDOW_WIDTH / 2) - SCANNER_WIDTH;
 
-    const secondScannerSpeed = 2;
+    const secondScannerSpeed = 1;
     const secondScannerMinRange = (WINDOW_WIDTH / 2);
     const secondScannerMaxRange = WINDOW_WIDTH - SCANNER_WIDTH;
 
@@ -59,8 +59,8 @@ function drawScanners() {
     const VERTICAL_SCANNER_X = 0;
     const VERTICAL_SCANNER_WIDTH = WINDOW_WIDTH;
 
-    const overlapFirst = geometry.isOverlap(firstScannerX, SCANNER_WIDTH, bigRangeX, bigRangeWidth)
-    const overlapSecond = geometry.isOverlap(secondScannerX, SCANNER_WIDTH, smallRangeX, smallRangeWidth)
+    const overlapFirst = geometry.isOverlap(firstScannerX, SCANNER_WIDTH, firstRangeX, firstRangeWidth) || geometry.isOverlap(firstScannerX, SCANNER_WIDTH, secondRangeX, secondRangeWidth);;
+    const overlapSecond = geometry.isOverlap(secondScannerX, SCANNER_WIDTH, firstRangeX, firstRangeWidth) || geometry.isOverlap(secondScannerX, SCANNER_WIDTH, secondRangeX, secondRangeWidth);
     const overlapVertical = geometry.isOverlap(verticalScannerY, verticalScannerHeight, horizonRangeY, HorizonRangeHeight)
 
     let firstScannerColor = overlapFirst ? r.RED : r.WHITE;
@@ -83,8 +83,8 @@ function drawParticleFields() {
     const HORIZON_RANGE_X = 0;
     const HORIZON_RANGE_WIDTH = WINDOW_WIDTH;
 
-    r.DrawRectangle(bigRangeX, RANGE_Y, bigRangeWidth, RANGE_HEIGHT, RANGE_COLOR);
-    r.DrawRectangle(smallRangeX, RANGE_Y, smallRangeWidth, RANGE_HEIGHT, RANGE_COLOR);
+    r.DrawRectangle(firstRangeX, RANGE_Y, firstRangeWidth, RANGE_HEIGHT, RANGE_COLOR);
+    r.DrawRectangle(secondRangeX, RANGE_Y, secondRangeWidth, RANGE_HEIGHT, RANGE_COLOR);
     r.DrawRectangle(HORIZON_RANGE_X, horizonRangeY, HORIZON_RANGE_WIDTH, HorizonRangeHeight, RANGE_COLOR);
 }
 
