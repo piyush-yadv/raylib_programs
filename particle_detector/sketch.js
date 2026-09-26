@@ -18,8 +18,11 @@ function setup() {
 let scannerX = 0;
 const scannerWidth = WINDOW_WIDTH / 15;
 
-const blueRangeX = WINDOW_WIDTH / 3;
-const blueRangeWidth = WINDOW_WIDTH / 6;
+const bigBlueRangeX = WINDOW_WIDTH / 3;
+const bigBlueRangeWidth = WINDOW_WIDTH / 6;
+
+const smallBlueRangeX = (WINDOW_WIDTH / 3) * 2;
+const smallBlueRangeWidth = WINDOW_WIDTH / 60;
 
 function update() {
 
@@ -27,29 +30,34 @@ function update() {
     const MIN_RANGE = 0;
 
     scannerX = geometry.scannerUpdate(scannerX, MIN_RANGE, MAX_RANGE);
-}
 
+}
 
 function drawScanner() {
 
-    const scannerY = 0;
-    const scannerHeight = WINDOW_HEIGHT;
+    const SCANNER_Y = 0;
+    const SCANNER_HEIGHT = WINDOW_HEIGHT;
+
+    const overlapFirst = geometry.isOverlap(scannerX, scannerWidth, bigBlueRangeX, bigBlueRangeWidth)
+    const overlapSecond = geometry.isOverlap(scannerX, scannerWidth, smallBlueRangeX, smallBlueRangeWidth)
+
 
     let scannerColor = r.WHITE;
-    if (geometry.isOverlap(scannerX, scannerWidth, blueRangeX, blueRangeWidth)) {
+    if (overlapFirst || overlapSecond) {
         scannerColor = r.RED;
     }
 
-    r.DrawRectangle(scannerX, scannerY, scannerWidth, scannerHeight, scannerColor);
+    r.DrawRectangle(scannerX, SCANNER_Y, scannerWidth, SCANNER_HEIGHT, scannerColor);
 }
 
 function drawBlueParticleField() {
 
-    const blueRangeY = 0;
-    const blueRangeColor = r.BLUE;
-    const blueRangeHeight = WINDOW_HEIGHT;
+    const RANGE_Y = 0;
+    const RANGE_COLOR = r.BLUE;
+    const RANGE_HEIGHT = WINDOW_HEIGHT;
 
-    r.DrawRectangle(blueRangeX, blueRangeY, blueRangeWidth, blueRangeHeight, blueRangeColor);
+    r.DrawRectangle(bigBlueRangeX, RANGE_Y, bigBlueRangeWidth, RANGE_HEIGHT, RANGE_COLOR);
+    r.DrawRectangle(smallBlueRangeX, RANGE_Y, smallBlueRangeWidth, RANGE_HEIGHT, RANGE_COLOR);
 }
 
 function draw() {
