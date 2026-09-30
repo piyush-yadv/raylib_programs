@@ -49,13 +49,18 @@ function setup() {
 function updateScannerVelocity() {
 
     scanner1X += scanner1Velocity;
-    if (g.scannerOutOfBounds(scanner1X, scanner1MinLen, scanner1MaxLen)) scanner1Velocity = -scanner1Velocity;
+    scanner1Velocity = getVelocity(scanner1X, scanner1MinLen, scanner1MaxLen, scanner1Velocity);
 
     scanner2X += scanner2Velocity;
-    if (g.scannerOutOfBounds(scanner2X, scanner2MinLen, scanner2MaxLen)) scanner2Velocity = -scanner2Velocity;
+    scanner2Velocity = getVelocity(scanner2X, scanner2MinLen, scanner2MaxLen, scanner2Velocity);
 
     scanner3Y += scanner3Velocity;
-    if (g.scannerOutOfBounds(scanner3Y, scanner3MinLen, scanner3MaxLen)) scanner3Velocity = -scanner3Velocity;
+    scanner3Velocity = getVelocity(scanner3Y, scanner3MinLen, scanner3MaxLen, scanner3Velocity);
+
+}
+
+function getVelocity(x, start, end, velocity) {
+    return g.scannerOutOfBounds(x, start, end) ? -velocity : velocity;
 }
 
 function updateScannerColor() {
@@ -89,7 +94,6 @@ function drawParticles() {
 }
 
 function update() {
-
     updateScannerVelocity();
     updateScannerColor();
 }
