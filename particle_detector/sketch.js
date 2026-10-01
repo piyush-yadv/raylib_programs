@@ -1,109 +1,49 @@
 const r = require('raylib');
-const g = require('./geometry');
-
-const WINDOW_WIDTH = 400;
-const WINDOW_HEIGHT = 400;
-const TITLE = 'particle detector';
-const FPS = 60;
-
-let scanner1X = 0;
-const scanner1Width = 20;
-let scanner1Velocity = 1;
-let scanner1Color = r.WHITE;
-const scanner1MinLen = 0;
-const scanner1MaxLen = WINDOW_WIDTH / 2 - scanner1Width;
-
-let scanner2X = WINDOW_WIDTH / 2;
-const scanner2Width = 20;
-let scanner2Velocity = 2;
-let scanner2Color = r.WHITE;
-const scanner2MinLen = WINDOW_WIDTH / 2;
-const scanner2MaxLen = WINDOW_WIDTH - scanner2Width;
-
-let scanner3Y = 0;
-const scanner3Height = 20;
-let scanner3Color = r.WHITE;
-let scanner3Velocity = 1;
-const scanner3MinLen = 0;
-const scanner3MaxLen = WINDOW_HEIGHT;
-
-const partical1_X = 150;
-const partical1_Width = 50;
-
-const partical2_X = 300;
-const partical2_Width = 30;
-
-const partical3_Y = 100;
-const partical3_height = 30;
+const sc = require('./scanner');
+const pt = require('./partical');
+const ol = require('./overlap');
 
 function running() {
     return !r.WindowShouldClose();
 }
 
-function setup() {
+function setup(window) {
     r.SetTraceLogLevel(r.LOG_NONE);
-    r.InitWindow(WINDOW_HEIGHT, WINDOW_WIDTH, TITLE);
-    r.SetTargetFPS(FPS);
+    r.InitWindow(window.height, window.width, window.title);
+    r.SetTargetFPS(window.FPS);
+
+    let world;
+    return world = {
+        scanner1: sc.createScanner(0, 0, 20, window.height, 1, r.WHITE, window.width / 2 - 20),
+        scanner2: sc.createScanner(window.width / 2, 0, 20, window.height, 2, r.WHITE, window.width - 20),
+        scanner3: sc.createScanner(0, 0, window.width, 20, 3, r.WHITE, window.height - 20),
+        partical1: pt.createPartical(150, 0, 50, window.height),
+        partical2: pt.createPartical(300, 0, 30, window.height),
+        partical3: pt.createPartical(0, 100, window.width, 30),
+    }
 }
 
-function updateScannerVelocity() {
+function update(world) {
+    world.scanner1.x += sc.updateVelocity(world.scanner1.x, world.scanner1);
+    world.scanner2.x += sc.updateVelocity(world.scanner2.x, world.scanner2);
+    world.scanner3.y += sc.updateVelocity(world.scanner3.y, world.scanner3);
 
-    scanner1X += scanner1Velocity;
-    scanner1Velocity = getVelocity(scanner1X, scanner1MinLen, scanner1MaxLen, scanner1Velocity);
-
-    scanner2X += scanner2Velocity;
-    scanner2Velocity = getVelocity(scanner2X, scanner2MinLen, scanner2MaxLen, scanner2Velocity);
-
-    scanner3Y += scanner3Velocity;
-    scanner3Velocity = getVelocity(scanner3Y, scanner3MinLen, scanner3MaxLen, scanner3Velocity);
-
+    world.scanner1.color = ol.updateColor(world.scanner1, world.partical1, world.partical2);
+    world.scanner2.color = ol.updateColor(world.scanner2, world.partical1, world.partical2);
+    world.scanner3.color = ol.updateHorizontalColor(world.scanner3, world.partical3);
 }
 
-function getVelocity(x, start, end, velocity) {
-    return g.scannerOutOfBounds(x, start, end) ? -velocity : velocity;
-}
-
-function updateScannerColor() {
-
-    scanner1Color = g.isOverlap(scanner1X, scanner1Width, partical1_X, partical1_Width) ||
-        g.isOverlap(scanner1X, scanner1Width, partical2_X, partical2_Width) ? r.RED : r.WHITE;
-
-    scanner2Color = g.isOverlap(scanner2X, scanner2Width, partical1_X, partical1_Width) ||
-        g.isOverlap(scanner2X, scanner2Width, partical2_X, partical2_Width) ? r.RED : r.WHITE;
-
-    scanner3Color = g.isOverlap(scanner3Y, scanner3Height, partical3_Y, partical3_height) ? r.RED : r.WHITE;
-}
-
-function drawRanges(x, y, width, height, color) {
-    r.DrawRectangle(x, y, width, height, color);
-}
-
-function drawScanners() {
-
-    drawRanges(scanner1X, 0, scanner1Width, WINDOW_HEIGHT, scanner1Color);
-    drawRanges(scanner2X, 0, scanner2Width, WINDOW_HEIGHT, scanner2Color);
-    drawRanges(0, scanner3Y, WINDOW_WIDTH, scanner3Height, scanner3Color);
-}
-
-function drawParticles() {
-
-    const particalColor = r.SKYBLUE;
-    drawRanges(partical1_X, 0, partical1_Width, WINDOW_HEIGHT, particalColor);
-    drawRanges(partical2_X, 0, partical2_Width, WINDOW_HEIGHT, particalColor);
-    drawRanges(0, partical3_Y, WINDOW_WIDTH, partical3_height, particalColor);
-}
-
-function update() {
-    updateScannerVelocity();
-    updateScannerColor();
-}
-
-function draw() {
+function draw(world) {
     r.BeginDrawing();
     r.ClearBackground(r.BLACK);
 
-    drawParticles();
-    drawScanners();
+    pt.drawParticles(world.partical1);
+    pt.drawParticles(world.partical2);
+    pt.drawParticles(world.partical3);
+
+    sc.drawScanners(world.scanner1);
+    sc.drawScanners(world.scanner2);
+    sc.drawScanners(world.scanner3);
 
     r.EndDrawing();
 }
@@ -112,10 +52,4 @@ function teardown() {
     r.CloseWindow();
 }
 
-module.exports = {
-    running,
-    setup,
-    update,
-    draw,
-    teardown,
-}
+module.exports = { running, setup, update, draw, teardown, };
