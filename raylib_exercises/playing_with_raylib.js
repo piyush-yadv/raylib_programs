@@ -52,10 +52,11 @@ function loop() {
     }
 }
 
+
 function main() {
     setup();
     loop();
-    r.closeWindow();
+    r.CloseWindow();
 }
 
 main();
